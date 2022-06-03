@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Board from "./components/Board";
+import calculateWinner from "./components/gameLogic";
 
 function App() {
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [isXNext, setX] = useState(false);
+  const winner = calculateWinner(board);
+
+  function handleClick(i) {
+    const boardCopy = [...board];
+    if (winner) return true;
+    boardCopy[i] = isXNext ? "X" : "O";
+    setBoard(boardCopy);
+    setX(!isXNext);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Board squares={board} handleClick={handleClick} />
+      {winner ? winner + "is Winner" : isXNext ? "X" : "O"}
     </div>
   );
 }
